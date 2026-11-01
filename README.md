@@ -49,6 +49,7 @@ SmartQuizApp/
 │   ├── server.js           # Express server
 │   └── .env                # Local Firebase Admin configuration; never commit
 ├── android/                # Android native project
+│   └── app/google-services.json # Local Firebase Android config; never commit
 ├── ios/                    # iOS native project
 ├── firestore.rules         # Firestore security rules
 └── firebase.json           # Firebase CLI configuration
@@ -155,7 +156,11 @@ npm run ios
 4. Configure the client values in `frontend/config/firebase.ts`.
 5. Copy `backend/.env.example` to `backend/.env` and set the Firebase Admin
    project ID, client email, and private key.
-6. Deploy the Firestore rules:
+6. Download the Android configuration from Firebase Console and save it as
+   `android/app/google-services.json`. A placeholder is available at
+   `android/app/google-services.json.template`; replace it with your own
+   Firebase project's file after cloning.
+7. Deploy the Firestore rules:
 
 ```powershell
 npx firebase-tools login
