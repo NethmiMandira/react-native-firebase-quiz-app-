@@ -1,0 +1,25 @@
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import type { Quiz } from '../../type/quiz';
+
+interface Props {
+  quiz: Quiz;
+  onPress: (quiz: Quiz) => void;
+}
+
+const QuizListItem: React.FC<Props> = ({ quiz, onPress }) => (
+  <TouchableOpacity style={styles.card} onPress={() => onPress(quiz)}>
+    <Text style={styles.subject}>{quiz.subject}</Text>
+    <Text>Attempts: {quiz.attempts}</Text>
+    <Text>Questions: {quiz.questions}</Text>
+    <Text>Score per Question: {quiz.score}</Text>
+    <Text>Timer: {quiz.timer} minutes</Text>
+  </TouchableOpacity>
+);
+
+const styles = StyleSheet.create({
+  card: { backgroundColor: '#e6f0ff', padding: 20, borderRadius: 8, marginBottom: 15 },
+  subject: { fontSize: 20, fontWeight: 'bold', marginBottom: 6, color: '#004080' },
+});
+
+export default QuizListItem;

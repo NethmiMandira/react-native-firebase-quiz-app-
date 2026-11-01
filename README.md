@@ -1,97 +1,249 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# SmartQuizApp
 
-# Getting Started
+SmartQuizApp is a React Native quiz platform with separate mentor and student
+workflows. Mentors create and manage quizzes and questions; students search for
+published quizzes, enroll, take timed quizzes, and review attempt history.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+## Features
 
-## Step 1: Start Metro
+- Email/password authentication with email verification
+- Mentor dashboard for creating, editing, publishing, and deleting quizzes
+- Question creation, editing, listing, and deletion
+- Student quiz search and enrollment
+- Timed quiz attempts with configurable attempt limits
+- Attempt history and score tracking
+- Firebase Authentication and Cloud Firestore persistence
+- Express backend health check and quiz API
+- Styled loading, empty, error, warning, success, and confirmation popups
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## Technology
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- React Native `0.88.1`
+- React `19.3`
+- TypeScript
+- React Navigation native stack
+- Firebase Web SDK for authentication and Firestore
+- Express `5`
+- Firebase Admin SDK
+- Metro, Gradle, and Hermes
 
-```sh
-# Using npm
-npm start
+## Project structure
 
-# OR using Yarn
-yarn start
+```text
+SmartQuizApp/
+├── App.tsx                 # React Native entry component
+├── frontend/
+│   ├── components/         # Shared UI and feature components
+│   ├── config/             # Firebase client configuration
+│   ├── .env                # Local Firebase client configuration; never commit
+│   ├── hooks/              # Reusable form/state hooks
+│   ├── navigation/         # Native stack navigation
+│   ├── screens/            # Authentication, mentor, student, and quiz screens
+│   ├── services/           # Quiz-related Firestore services
+│   ├── theme/              # Colors, layout, and shared styling
+│   ├── type/               # TypeScript domain and navigation types
+│   └── utils/              # User-facing messages and quiz helpers
+├── backend/
+│   ├── server.js           # Express server
+│   └── .env                # Local Firebase Admin configuration; never commit
+├── android/                # Android native project
+├── ios/                    # iOS native project
+├── firestore.rules         # Firestore security rules
+└── firebase.json           # Firebase CLI configuration
 ```
 
-## Step 2: Build and run your app
+Generated directories such as `node_modules`, Android build output, and iOS
+Pods should not be edited or committed.
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+## Requirements
+
+- Node.js `>= 22.11.0`
+- npm
+- Android Studio and an Android SDK for Android development
+- Xcode and CocoaPods for iOS development on macOS
+- A Firebase project with Authentication and Firestore enabled
+- Firebase CLI for deploying Firestore rules
+
+## Installation
+
+From the repository root:
+
+```powershell
+npm install
+```
+
+Install backend dependencies:
+
+```powershell
+cd backend
+npm install
+cd ..
+```
+
+The backend reads Firebase Admin configuration from `backend/.env`. Copy
+`backend/.env.example` to `backend/.env` and fill in the values from a Firebase
+service-account key. Never commit or share the completed `.env` file.
+
+The frontend reads its Firebase client values from `frontend/.env` through the
+`react-native-dotenv` Babel plugin. Copy `frontend/.env.example` to
+`frontend/.env` and fill in the values from the Firebase project settings.
+Restart Metro after changing environment values.
+
+## Running the application
+
+### Start the complete development environment
+
+This starts Metro on port `8081` and the backend on port `5000`:
+
+```powershell
+npm run dev
+```
+
+### Start Metro only
+
+```powershell
+npm start
+```
+
+### Run the backend only
+
+```powershell
+cd backend
+npm run dev
+```
+
+The backend exposes:
+
+- `GET /` — health check
+- `GET /api/quizzes` — returns quizzes from Firestore
 
 ### Android
 
-```sh
-# Using npm
-npm run android
+Start an emulator or connect a USB-debugging-enabled device, then run:
 
-# OR using Yarn
-yarn android
+```powershell
+npm run android
+```
+
+On long Windows paths, Android builds may exceed the native path limit. A
+temporary drive mapping can be used:
+
+```powershell
+subst S: C:\Users\DELL\desktop\projects\SmartQuizApp
+Set-Location S:\
+npm run android -- --no-packager --device <DEVICE_ID>
+subst S: /D
 ```
 
 ### iOS
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+On macOS:
 
 ```sh
 bundle install
-```
-
-Then, and every time you update your native dependencies, run:
-
-```sh
 bundle exec pod install
-```
-
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
-
-```sh
-# Using npm
 npm run ios
-
-# OR using Yarn
-yarn ios
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+## Firebase setup
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+1. Create or select a Firebase project.
+2. Enable Email/Password under Firebase Authentication.
+3. Create a Firestore database.
+4. Configure the client values in `frontend/config/firebase.ts`.
+5. Copy `backend/.env.example` to `backend/.env` and set the Firebase Admin
+   project ID, client email, and private key.
+6. Deploy the Firestore rules:
 
-## Step 3: Modify your app
+```powershell
+npx firebase-tools login
+npx firebase-tools use <FIREBASE_PROJECT_ID>
+npx firebase-tools deploy --only firestore:rules
+```
 
-Now that you have successfully run the app, let's make changes!
+The current rules allow authenticated users to read published quizzes, while
+quiz owners can manage their own quizzes and questions. Students can manage
+their own enrolled quizzes and attempts.
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## Development workflow
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+- Screens are registered in `frontend/navigation/AppNavigator.tsx`.
+- Add new screen route types in `frontend/type/navigation.ts`.
+- Reuse components from `frontend/components/common`.
+- Use `MessageModal` through the shared status components for user-facing
+  errors, warnings, success messages, and confirmations.
+- Do not display raw Firebase errors to users; map them to friendly messages
+  with `frontend/utils/userMessage.ts`.
+- Keep Firestore reads and writes in the existing Firebase/service patterns.
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+## React Native DevTools
 
-## Congratulations! :tada:
+With Metro running, open the React Native developer menu:
 
-You've successfully run and modified your React Native App. :partying_face:
+- Android device: press `Ctrl+M`, or run `adb shell input keyevent 82`
+- Android emulator: press `Ctrl+M`
+- iOS simulator: press `Cmd+M`
 
-### Now what?
+Choose **Open DevTools** from the developer menu. Metro is available at
+`http://localhost:8081`.
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+## Validation
 
-# Troubleshooting
+Type-check the project:
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+```powershell
+npx tsc --noEmit
+```
 
-# Learn More
+Run the test suite:
 
-To learn more about React Native, take a look at the following resources:
+```powershell
+npm test
+```
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Build and launch Android:
+
+```powershell
+npm run android
+```
+
+## Troubleshooting
+
+### Metro or app is using stale code
+
+Stop Metro and restart it with a cleared cache:
+
+```powershell
+npx react-native start --reset-cache
+```
+
+### Firestore permission denied
+
+Confirm that the user is authenticated, the quiz is published when required,
+and the deployed rules belong to the same Firebase project configured in
+`frontend/config/firebase.ts`.
+
+### Backend cannot start
+
+Confirm that `backend/.env` exists and contains valid Firebase Admin
+configuration. Do not copy credentials into source code or commit them.
+
+### Android build path errors on Windows
+
+Use the temporary `subst` drive mapping described in the Android section and
+remove it after the build completes.
+
+### TypeScript reports Jest globals missing
+
+Check that Jest type definitions are installed and included by the project
+configuration:
+
+```powershell
+npm install
+```
+
+## Security
+
+Never commit Firebase Admin credentials, private keys, `.env` files, or other
+secrets. If a credential is exposed, revoke it in Firebase/Google Cloud and
+generate a replacement immediately.
