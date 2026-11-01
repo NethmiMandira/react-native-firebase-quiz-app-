@@ -4,6 +4,8 @@ SmartQuizApp is a React Native quiz platform with separate mentor and student
 workflows. Mentors create and manage quizzes and questions; students search for
 published quizzes, enroll, take timed quizzes, and review attempt history.
 
+> This is my first project developed as an academic project.
+
 ## Features
 
 - Email/password authentication with email verification
