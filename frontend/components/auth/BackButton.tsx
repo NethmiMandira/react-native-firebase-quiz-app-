@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import AntDesign from 'react-native-vector-icons/AntDesign';
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+
 import { colors } from '../../theme/colors';
 import { width } from '../../theme/layout';
 
@@ -10,7 +11,7 @@ interface Props {
 
 const BackButton: React.FC<Props> = ({ onPress }) => (
   <TouchableOpacity style={styles.button} onPress={onPress}>
-    <AntDesign name="arrowleft" size={width * 0.06} color={colors.textDark} />
+    <MaterialIcons name="arrow-back" size={24} color={colors.textDark} />
   </TouchableOpacity>
 );
 

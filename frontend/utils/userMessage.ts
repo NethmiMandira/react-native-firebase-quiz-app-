@@ -2,6 +2,11 @@ export function getUserMessage(error: unknown, fallback: string): string {
   const code = typeof error === 'object' && error !== null && 'code' in error
     ? String((error as { code?: unknown }).code)
     : '';
+  const rawMessage = error instanceof Error ? error.message : '';
+
+  if (rawMessage.includes('requests-from-this-android-client-application')) {
+    return 'This app is not authorized to connect yet. Please contact the app administrator.';
+  }
 
   const messages: Record<string, string> = {
     'auth/invalid-email': 'Please enter a valid email address.',
