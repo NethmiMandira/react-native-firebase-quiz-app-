@@ -7,6 +7,7 @@ export interface Quiz {
   timer?: number;
   published?: boolean;
   addedQuestions?: number;
+  createdAt?: unknown;
 }
 
 export interface QuizQuestion {
@@ -36,6 +37,7 @@ export interface MentorQuiz {
   userId?: string;
   published: boolean;
   studentScores?: { attempts: number; score: number }[];
+  createdAt?: unknown;
 }
 
 /** A quiz a student found / enrolled in. */
@@ -49,6 +51,7 @@ export interface EnrolledQuiz {
   questions: QuizQuestion[];
   userId: string;
   mentorName: string;
+  createdAt?: unknown;
 }
 
 export interface AttemptRecord {

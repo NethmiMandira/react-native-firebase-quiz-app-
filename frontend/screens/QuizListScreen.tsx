@@ -30,6 +30,7 @@ const QuizListScreen: React.FC<ScreenProps<'QuizList'>> = ({ navigation }) => {
             score: data.score || 0,
             timer: data.timer || 0,
             published: data.published ?? true,
+            createdAt: data.createdAt,
           };
         }),
       );

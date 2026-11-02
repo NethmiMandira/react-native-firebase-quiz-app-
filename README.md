@@ -12,6 +12,7 @@ published quizzes, enroll, take timed quizzes, and review attempt history.
 - Mentor dashboard for creating, editing, publishing, and deleting quizzes
 - Question creation, editing, listing, and deletion
 - Student quiz search and enrollment
+- Created date and time displayed on quiz cards
 - Timed quiz attempts with configurable attempt limits
 - Attempt history and score tracking
 - Firebase Authentication and Cloud Firestore persistence
@@ -179,6 +180,8 @@ their own enrolled quizzes and attempts.
 - Reuse components from `frontend/components/common`.
 - Use `MessageModal` through the shared status components for user-facing
   errors, warnings, success messages, and confirmations.
+- Use `frontend/utils/date.ts` when displaying Firestore quiz timestamps so
+  missing or invalid dates do not break a card.
 - Do not display raw Firebase errors to users; map them to friendly messages
   with `frontend/utils/userMessage.ts`.
 - Keep Firestore reads and writes in the existing Firebase/service patterns.

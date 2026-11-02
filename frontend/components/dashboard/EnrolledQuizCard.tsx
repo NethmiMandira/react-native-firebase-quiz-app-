@@ -4,6 +4,7 @@ import { IconBadge, MessageModal, StatItem } from '../common';
 import { colors } from '../../theme/colors';
 import { shadow } from '../../theme/layout';
 import type { EnrolledQuiz } from '../../type/quiz';
+import { formatCreatedAt } from '../../utils/date';
 
 interface Props {
   quiz: EnrolledQuiz;
@@ -13,6 +14,7 @@ interface Props {
 
 const EnrolledQuizCard: React.FC<Props> = ({ quiz, onPress, onRemove }) => {
   const [confirming, setConfirming] = React.useState(false);
+  const createdAt = formatCreatedAt(quiz.createdAt);
 
   return (
     <View style={styles.card}>
@@ -22,6 +24,7 @@ const EnrolledQuizCard: React.FC<Props> = ({ quiz, onPress, onRemove }) => {
           <IconBadge emoji="▶️" fontSize={14} backgroundColor={colors.successSoft} />
         </View>
         <Text style={styles.mentor}>By {quiz.mentorName}</Text>
+        {createdAt ? <Text style={styles.createdAt}>Created {createdAt}</Text> : null}
         <View style={styles.stats}>
           <StatItem icon="📝" text={`${quiz.questions?.length || 0} Questions`} />
           {quiz.attempts ? <StatItem icon="🎯" text={`${quiz.attempts} Attempts`} /> : null}
@@ -62,6 +65,7 @@ const styles = StyleSheet.create({
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   subject: { fontSize: 18, fontWeight: '700', color: colors.textDark, flex: 1 },
   mentor: { fontSize: 14, color: colors.textMuted, marginBottom: 12, fontWeight: '500' },
+  createdAt: { fontSize: 12, color: colors.placeholder, marginBottom: 12, fontWeight: '500' },
   stats: { flexDirection: 'row', flexWrap: 'wrap' },
   deleteButton: {
     position: 'absolute',

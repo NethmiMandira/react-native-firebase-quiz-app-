@@ -59,6 +59,7 @@ const MentorDashboardScreen: React.FC<ScreenProps<'MentorDashboardScreen'>> = ({
             questions: data.questions,
             score: data.score,
             timer: data.timer,
+            createdAt: data.createdAt,
             userId: data.userId,
             published: isPublished(data.published),
             studentScores,

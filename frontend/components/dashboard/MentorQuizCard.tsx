@@ -4,6 +4,7 @@ import { IconBadge, StatItem } from '../common';
 import { colors } from '../../theme/colors';
 import { shadow } from '../../theme/layout';
 import type { MentorQuiz } from '../../type/quiz';
+import { formatCreatedAt } from '../../utils/date';
 
 interface Props {
   quiz: MentorQuiz;
@@ -15,6 +16,7 @@ interface Props {
 /** Swipe-to-delete quiz card shown on the mentor dashboard. */
 const MentorQuizCard: React.FC<Props> = ({ quiz, mentorName, onPress, onDelete }) => {
   const published = quiz.published === true;
+  const createdAt = formatCreatedAt(quiz.createdAt);
 
   return (
     <View>
@@ -31,6 +33,7 @@ const MentorQuizCard: React.FC<Props> = ({ quiz, mentorName, onPress, onDelete }
             />
           </View>
           <Text style={styles.mentorName}>By {mentorName}</Text>
+          {createdAt ? <Text style={styles.createdAt}>Created {createdAt}</Text> : null}
         </View>
 
         <View style={styles.stats}>
@@ -56,6 +59,7 @@ const styles = StyleSheet.create({
   titleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   subject: { fontSize: 18, fontWeight: '700', color: colors.textDark, flex: 1 },
   mentorName: { fontSize: 14, color: colors.textMuted, fontWeight: '500' },
+  createdAt: { fontSize: 12, color: colors.placeholder, marginTop: 4, fontWeight: '500' },
   stats: { flexDirection: 'row', flexWrap: 'wrap' },
   deleteButton: {
     backgroundColor: colors.danger,
