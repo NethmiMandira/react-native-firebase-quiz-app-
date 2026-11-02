@@ -37,8 +37,9 @@ const StatusState: React.FC<Props> = ({
       message={message}
       tone={tone}
       confirmLabel={actionLabel || 'OK'}
+      cancelLabel={actionLabel && onAction ? 'OK' : undefined}
       onCancel={() => setVisible(false)}
-      onConfirm={actionLabel && onAction ? handleAction : undefined}
+      onConfirm={handleAction}
     />
   );
 };

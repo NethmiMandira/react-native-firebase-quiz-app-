@@ -139,8 +139,11 @@ const MentorDashboardScreen: React.FC<ScreenProps<'MentorDashboardScreen'>> = ({
       await fetchQuizzes();
       setActionMessage('Quiz deleted successfully.');
     } catch (error) {
-      console.error('Error deleting quiz:', error);
-      setError('We could not delete this quiz. Please try again.');
+      console.warn('Quiz deletion failed.');
+      setError(null);
+      setTimeout(() => {
+        setError('We could not delete this quiz. Please try again.');
+      }, 0);
     }
   };
 
